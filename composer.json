@@ -1,0 +1,42 @@
+{
+    "name": "d4rk0snet/donation",
+    "description": "Plugin permettant à des personnes de faire un don",
+    "type": "wordpress-plugin",
+    "autoload": {
+        "psr-4": {
+            "D4rk0snet\\Donation\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Grégory COLLIN",
+            "email": "gregory@d4rk0s.net"
+        }
+    ],
+    "repositories": [
+        {
+            "type" : "vcs",
+            "url": "git@github.com:ds-hyperion/doctrine.git",
+            "no-api": true
+        },
+        {
+            "type" : "vcs",
+            "url": "git@github.com:ds-hyperion/restapi.git",
+            "no-api": true
+        },
+        {
+            "type" : "vcs",
+            "url": "git@github.com:ds-hyperion/stripe.git",
+            "no-api": true
+        }
+    ],
+    "require":
+    {
+        "hyperion/doctrine": "dev-dev",
+        "hyperion/restapi": "dev-dev",
+        "hyperion/stripe": "dev-dev",
+        "netresearch/jsonmapper": "^4.0",
+        "ramsey/uuid": "^4.3",
+        "ramsey/uuid-doctrine": "^1.8"
+    }
+}
