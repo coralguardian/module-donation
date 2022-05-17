@@ -10,10 +10,12 @@
  * Licence: GPLv2
  */
 
+use Hyperion\Stripe\Enum\StripeEventEnum;
+
 add_action('init', ['\D4rk0snet\Donation\Plugin','init']);
 add_filter(\Hyperion\Doctrine\Plugin::ADD_ENTITIES_FILTER, function (array $entitiesPath) {
     $entitiesPath[] = __DIR__."/src/Entity";
 
     return $entitiesPath;
 });
-//add_action(StripeEventEnum::SETUPINTENT_SUCCESS, ['\D4rk0snet\Donation\Action\SetupIntentSuccess','doAction']);
+add_action(StripeEventEnum::PAYMENT_SUCCESS->value, ['\D4rk0snet\Donation\Action\SubscriptionPaymentSuccess','doAction']);

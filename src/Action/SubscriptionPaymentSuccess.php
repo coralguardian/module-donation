@@ -14,12 +14,8 @@ class SubscriptionPaymentSuccess
         }
 
         SubscriptionService::createSubscription(
-            customerEmail: $paymentIntent->metadata->email,
-            firstname: $paymentIntent->metadata->firstname,
-            lastname: $paymentIntent->metadata->lastname,
-            paymentMethodId: $paymentIntent->payment_method,
-            amount: $paymentIntent->metadata->amount
+            customerId: $paymentIntent->customer,
+            amount: $paymentIntent->amount
         );
     }
-
 }
