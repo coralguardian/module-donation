@@ -22,7 +22,7 @@ class DonationService
             lastname: $donationModel->getLastname(),
             address: $donationModel->getAddress(),
             city: $donationModel->getCity(),
-            country: $donationModel->getCountry(),
+            postalCode: $donationModel->getPostalCode(),
             email: $donationModel->getEmail(),
             donationStart: new \DateTime(),
             amount: $donationModel->getAmount(),
@@ -59,14 +59,5 @@ class DonationService
         $bill = BillingService::createBill($customerId);
 
         return BillingService::finalizeAndGetPaymentIntent($bill);
-    }
-
-    public static function createSubscription(DonationModel $donationModel) : string
-    {
-        $setupIntent = SubscriptionService::createSubscription($donationModel);
-
-
-
-        return $setupIntent->client_secret;
     }
 }

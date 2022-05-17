@@ -6,6 +6,7 @@ use D4rk0snet\Donation\Models\DonationModel;
 use D4rk0snet\Donation\Service\DonationService;
 use Hyperion\RestAPI\APIEnpointAbstract;
 use Hyperion\RestAPI\APIManagement;
+use Hyperion\Stripe\Service\StripeService;
 use JsonMapper;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -14,15 +15,21 @@ class RecurringDonateEndpoint extends APIEnpointAbstract
 {
     public static function callback(WP_REST_Request $request): WP_REST_Response
     {
-        $payload = json_decode($request->get_body());
-        if($payload === null) {
+        $payload = json_decode($request->get_body(), false, 512, JSON_THROW_ON_ERROR);
+        if ($payload === null) {
             return APIManagement::APIError("Invalid body content", 400);
         }
 
-        $mapper = new JsonMapper();
-        $donationModel = $mapper->map($payload, new DonationModel());
+        try {
+            $mapper = new JsonMapper();
+            $mapper->bExceptionOnUndefinedProperty = true;
+            $mapper->bExceptionOnMissingData = true;
+            $donationModel = $mapper->map($payload, new DonationModel());
+        } catch (\Exception $exception) {
+            return APIManagement::APIError($exception->getMessage(), 400);
+        }
 
-        $secret = DonationService::createSubscription($donationModel);
+        $secret = StripeService::createPaymentIntent($donationModel->getAmount(), array_merge(['type' => 'recurringSubscription'], $donationModel->toArray()));
 
         return APIManagement::APIOk([
             'secret' => $secret
