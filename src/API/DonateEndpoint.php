@@ -16,12 +16,18 @@ class DonateEndpoint extends APIEnpointAbstract
     public static function callback(WP_REST_Request $request): WP_REST_Response
     {
         $payload = json_decode($request->get_body());
-        if($payload === null) {
+        if ($payload === null) {
             return APIManagement::APIError("Invalid body content", 400);
         }
 
-        $mapper = new JsonMapper();
-        $donationModel = $mapper->map($payload, new DonationModel());
+        try {
+            $mapper = new JsonMapper();
+            $mapper->bExceptionOnUndefinedProperty = true;
+            $mapper->bExceptionOnMissingData = true;
+            $donationModel = $mapper->map($payload, new DonationModel());
+        } catch (\Exception $exception) {
+            return APIManagement::APIError($exception->getMessage(), 400);
+        }
 
         $donation = DonationService::createDonation($donationModel);
         $paymentIntent = DonationService::createInvoiceAndGetPaymentIntent($donationModel);
