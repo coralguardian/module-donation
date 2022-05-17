@@ -11,3 +11,9 @@
  */
 
 add_action('init', ['\D4rk0snet\Donation\Plugin','init']);
+add_filter(\Hyperion\Doctrine\Plugin::ADD_ENTITIES_FILTER, function (array $entitiesPath) {
+    $entitiesPath[] = __DIR__."/src/Entity";
+
+    return $entitiesPath;
+});
+//add_action(StripeEventEnum::SETUPINTENT_SUCCESS, ['\D4rk0snet\Donation\Action\SetupIntentSuccess','doAction']);
