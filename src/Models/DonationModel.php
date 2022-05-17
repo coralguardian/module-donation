@@ -25,6 +25,11 @@ class DonationModel
     /**
      * @required
      */
+    private string $postalCode;
+
+    /**
+     * @required
+     */
     private string $city;
 
     /**
@@ -159,6 +164,17 @@ class DonationModel
         } catch (\ValueError $exception) {
             throw new \Exception("Language has not a valid value");
         }
+    }
+
+    public function getPostalCode(): string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(string $postalCode): DonationModel
+    {
+        $this->postalCode = $postalCode;
+        return $this;
     }
 
     public function getStripePaymentMethodId(): string

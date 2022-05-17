@@ -49,7 +49,7 @@ class DonationEntity
     /**
      * @ORM\Column(type="string")
      */
-    private string $country;
+    private string $postalCode;
 
     /**
      * @ORM\Column(type="string")
@@ -76,21 +76,22 @@ class DonationEntity
      */
     private Language $lang;
 
-    public function __construct(string $firstname,
-                                string $lastname,
-                                string $address,
-                                string $city,
-                                string $country,
-                                string $email,
-                                DateTime $donationStart,
-                                int $amount,
-                                Language $lang)
-    {
+    public function __construct(
+        string $firstname,
+        string $lastname,
+        string $address,
+        string $city,
+        string $postalCode,
+        string $email,
+        DateTime $donationStart,
+        int $amount,
+        Language $lang
+    ) {
         $this->firstname = $firstname;
         $this->lastname = $lastname;
         $this->address = $address;
         $this->city = $city;
-        $this->country = $country;
+        $this->postalCode = $postalCode;
         $this->email = $email;
         $this->donationStart = $donationStart;
         $this->amount = $amount;
@@ -122,9 +123,9 @@ class DonationEntity
         return $this->city;
     }
 
-    public function getCountry(): string
+    public function getPostalCode(): string
     {
-        return $this->country;
+        return $this->postalCode;
     }
 
     public function getEmail(): string
