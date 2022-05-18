@@ -32,7 +32,7 @@ class RecurringDonateEndpoint extends APIEnpointAbstract
             return APIManagement::APIError($exception->getMessage(), 400);
         }
 
-        $customer = CustomerService::getOrCreateCustomer(
+        $customer = CustomerService::getOrCreateIndividualCustomer(
             email: $donationModel->getEmail(),
             firstName: $donationModel->getFirstname(),
             lastName: $donationModel->getLastname(),

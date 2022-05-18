@@ -37,7 +37,7 @@ class DonationService
 
     public static function createInvoiceAndGetPaymentIntent(DonationModel $donationModel) : PaymentIntent
     {
-        $customerId = CustomerService::getOrCreateCustomer(
+        $customerId = CustomerService::getOrCreateIndividualCustomer(
             email: $donationModel->getEmail(),
             firstName: $donationModel->getFirstname(),
             lastName: $donationModel->getLastname(),
