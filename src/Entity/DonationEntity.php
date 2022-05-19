@@ -21,9 +21,9 @@ use Doctrine\ORM\Mapping\InheritanceType;
  * @InheritanceType("SINGLE_TABLE")
  * @DiscriminatorColumn(name="discr", type="string")
  * @DiscriminatorMap({
- *     "uniqueDonation" = "uniqueDonation",
- *     "recurrentDonation" = "recurrentDonation",
- *     "adoption" = "adoption"
+ *     "uniqueDonation" = "\D4rk0snet\Donation\Entity\DonationEntity",
+ *     "recurrentDonation" = "\D4rk0snet\Donation\Entity\RecurringDonationEntity",
+ *     "adoption" = "\D4rk0snet\Adoption\Entity\AdoptionEntity"
  * })
  */
 class DonationEntity
