@@ -71,6 +71,7 @@ class DonationEntity
         $this->customer = $customer;
         $this->date = $date;
         $this->amount = $amount;
+        $this->lang = $lang;
     }
 
     public function getUuid()

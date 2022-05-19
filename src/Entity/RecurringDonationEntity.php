@@ -11,6 +11,9 @@ use Doctrine\ORM\Mapping\Entity;
  */
 class RecurringDonationEntity extends DonationEntity
 {
+    /**
+     * @ORM\Column(type="string")
+     */
     private string $subscriptionId;
 
     public function getSubscriptionId(): string
