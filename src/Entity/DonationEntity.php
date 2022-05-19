@@ -23,7 +23,7 @@ use Doctrine\ORM\Mapping\InheritanceType;
  * @DiscriminatorMap({
  *     "uniqueDonation" = "\D4rk0snet\Donation\Entity\DonationEntity",
  *     "recurrentDonation" = "\D4rk0snet\Donation\Entity\RecurringDonationEntity",
- *     "adoption" = "\D4rk0snet\Adoption\Entity\AdoptionEntity"
+ *     "regularAdoption" = "\D4rk0snet\Adoption\Entity\AdoptionEntity"
  * })
  */
 class DonationEntity
