@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping\InheritanceType;
 /**
  * @Entity
  * @ORM\Table(name="donation")
- * @InheritanceType("SINGLE_TABLE")
+ * @InheritanceType("JOINED")
  * @DiscriminatorColumn(name="discr", type="string")
  * @DiscriminatorMap({
  *     "uniqueDonation" = "\D4rk0snet\Donation\Entity\DonationEntity",

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping\Entity;
 
 /**
  * @Entity
- * @ORM\Table(name="recurring_donation")
+ * @ORM\Table(name="donation_recurring")
  */
 class RecurringDonationEntity extends DonationEntity
 {
