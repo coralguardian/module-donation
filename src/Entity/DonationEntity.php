@@ -38,6 +38,7 @@ class DonationEntity
 
     /**
      * @ORM\ManyToOne(targetEntity="\D4rk0snet\Coralguardian\Entity\CustomerEntity")
+     * @ORM\JoinColumn(name="customer", referencedColumnName="uuid")
      */
     private CustomerEntity $customer;
 
