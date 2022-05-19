@@ -11,19 +11,16 @@ use Doctrine\ORM\Mapping\Entity;
  */
 class RecurringDonationEntity extends DonationEntity
 {
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private string $setupIntentId;
+    private string $subscriptionId;
 
-    public function getSetupIntentId(): string
+    public function getSubscriptionId(): string
     {
-        return $this->setupIntentId;
+        return $this->subscriptionId;
     }
 
-    public function setSetupIntentId(string $setupIntentId): RecurringDonationEntity
+    public function setSubscriptionId(string $subscriptionId): RecurringDonationEntity
     {
-        $this->setupIntentId = $setupIntentId;
+        $this->subscriptionId = $subscriptionId;
         return $this;
     }
 }

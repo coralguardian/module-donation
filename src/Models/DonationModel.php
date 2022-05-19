@@ -2,45 +2,15 @@
 
 namespace D4rk0snet\Donation\Models;
 
+use D4rk0snet\Coralguardian\Enums\Language;
 use D4rk0snet\Donation\Enums\DonationRecurrencyEnum;
-use D4rk0snet\Donation\Enums\Language;
 
 class DonationModel
 {
     /**
      * @required
      */
-    private string $firstname;
-
-    /**
-     * @required
-     */
-    private string $lastname;
-
-    /**
-     * @required
-     */
-    private string $address;
-
-    /**
-     * @required
-     */
-    private string $postalCode;
-
-    /**
-     * @required
-     */
-    private string $city;
-
-    /**
-     * @required
-     */
-    private string $country;
-
-    /**
-     * @required
-     */
-    private string $email;
+    private string $customerUUID;
 
     /**
      * @required
@@ -52,75 +22,10 @@ class DonationModel
      */
     private Language $lang;
 
-
-    private string $stripePaymentMethodId;
-
-
-    public function getFirstname(): string
-    {
-        return $this->firstname;
-    }
-
-    public function setFirstname(string $firstname): DonationModel
-    {
-        $this->firstname = $firstname;
-        return $this;
-    }
-
-    public function getLastname(): string
-    {
-        return $this->lastname;
-    }
-
-    public function setLastname(string $lastname): DonationModel
-    {
-        $this->lastname = $lastname;
-        return $this;
-    }
-
-    public function getAddress(): string
-    {
-        return $this->address;
-    }
-
-    public function setAddress(string $address): DonationModel
-    {
-        $this->address = $address;
-        return $this;
-    }
-
-    public function getCity(): string
-    {
-        return $this->city;
-    }
-
-    public function setCity(string $city): DonationModel
-    {
-        $this->city = $city;
-        return $this;
-    }
-
-    public function getCountry(): string
-    {
-        return $this->country;
-    }
-
-    public function setCountry(string $country): DonationModel
-    {
-        $this->country = $country;
-        return $this;
-    }
-
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): DonationModel
-    {
-        $this->email = $email;
-        return $this;
-    }
+    /**
+     * @required
+     */
+    private DonationRecurrencyEnum $donationRecurrency;
 
     public function getAmount(): float
     {
@@ -166,20 +71,15 @@ class DonationModel
         }
     }
 
-    public function getPostalCode(): string
+    public function getCustomerUUID(): string
     {
-        return $this->postalCode;
+        return $this->customerUUID;
     }
 
-    public function setPostalCode(string $postalCode): DonationModel
+    public function setCustomerUUID(string $customerUUID): DonationModel
     {
-        $this->postalCode = $postalCode;
+        $this->customerUUID = $customerUUID;
         return $this;
-    }
-
-    public function getStripePaymentMethodId(): string
-    {
-        return $this->stripePaymentMethodId;
     }
 
     public function toArray() : array

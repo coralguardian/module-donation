@@ -15,14 +15,13 @@ class DonateEndpoint extends APIEnpointAbstract
 {
     public static function callback(WP_REST_Request $request): WP_REST_Response
     {
-        $payload = json_decode($request->get_body());
+        $payload = json_decode($request->get_body(), false, 512, JSON_THROW_ON_ERROR);
         if ($payload === null) {
             return APIManagement::APIError("Invalid body content", 400);
         }
 
         try {
             $mapper = new JsonMapper();
-            $mapper->bExceptionOnUndefinedProperty = true;
             $mapper->bExceptionOnMissingData = true;
             $donationModel = $mapper->map($payload, new DonationModel());
         } catch (\Exception $exception) {
@@ -33,10 +32,13 @@ class DonateEndpoint extends APIEnpointAbstract
         $paymentIntent = DonationService::createInvoiceAndGetPaymentIntent($donationModel);
 
         // Add Donation id to paymentintent
-        StripeService::addMetadataToPaymentIntent($paymentIntent, [
-            'donation_uuid' => $donation->getUuid(),
-            'type' => 'donation'
-        ]);
+        StripeService::addMetadataToPaymentIntent($paymentIntent, array_merge(
+            [
+                'donation_uuid' => $donation->getUuid(),
+                'type' => 'donation'
+            ],
+            $donationModel->toArray()
+        ));
 
         return APIManagement::APIOk([
             'secret' => $paymentIntent->client_secret

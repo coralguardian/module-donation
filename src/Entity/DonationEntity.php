@@ -2,19 +2,29 @@
 
 namespace D4rk0snet\Donation\Entity;
 
-use D4rk0snet\Donation\Enums\Language;
-use D4rk0snet\Donation\Enums\DonationRecurrencyEnum;
+use D4rk0snet\Coralguardian\Entity\CustomerEntity;
+use D4rk0snet\Coralguardian\Enums\Language;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\CustomIdGenerator;
+use Doctrine\ORM\Mapping\DiscriminatorColumn;
+use Doctrine\ORM\Mapping\DiscriminatorMap;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\InheritanceType;
 
 /**
  * @Entity
  * @ORM\Table(name="donation")
+ * @InheritanceType("SINGLE_TABLE")
+ * @DiscriminatorColumn(name="discr", type="string")
+ * @DiscriminatorMap({
+ *     "uniqueDonation" = "uniqueDonation",
+ *     "recurrentDonation" = "recurrentDonation",
+ *     "adoption" = "adoption"
+ * })
  */
 class DonationEntity
 {
@@ -27,75 +37,39 @@ class DonationEntity
     private $uuid;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\ManyToOne(targetEntity="\D4rk0snet\Coralguardian\Entity\CustomerEntity")
      */
-    private string $firstname;
-
-    /**
-     * @ORM\Column(type="string")
-     */
-    private string $lastname;
-
-    /**
-     * @ORM\Column(type="string")
-     */
-    private string $address;
-
-    /**
-     * @ORM\Column(type="string")
-     */
-    private string $city;
-
-    /**
-     * @ORM\Column(type="string")
-     */
-    private string $postalCode;
-
-    /**
-     * @ORM\Column(type="string")
-     */
-    private string $email;
+    private CustomerEntity $customer;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private DateTime $donationStart;
+    private DateTime $date;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private float $amount;
+
+    /**
+     * @ORM\Column(type="string", enumType="\D4rk0snet\Coralguardian\Enums\Language")
+     */
+    private Language $lang;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
     private ?string $stripePaymentIntentId;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private int $amount;
-
-    /**
-     * @ORM\Column(type="string", enumType="\D4rk0snet\Adoption\Enums\Language")
-     */
-    private Language $lang;
-
     public function __construct(
-        string $firstname,
-        string $lastname,
-        string $address,
-        string $city,
-        string $postalCode,
-        string $email,
-        DateTime $donationStart,
-        int $amount,
-        Language $lang
+        CustomerEntity $customer,
+        DateTime       $date,
+        float          $amount,
+        Language       $lang
     ) {
-        $this->firstname = $firstname;
-        $this->lastname = $lastname;
-        $this->address = $address;
-        $this->city = $city;
-        $this->postalCode = $postalCode;
-        $this->email = $email;
-        $this->donationStart = $donationStart;
+        $this->customer = $customer;
+        $this->date = $date;
         $this->amount = $amount;
-        $this->lang = $lang;
     }
 
     public function getUuid()
@@ -103,49 +77,37 @@ class DonationEntity
         return $this->uuid;
     }
 
-    public function getFirstname(): string
+    public function getCustomer(): CustomerEntity
     {
-        return $this->firstname;
+        return $this->customer;
     }
 
-    public function getLastname(): string
+    public function setCustomer(CustomerEntity $customer): DonationEntity
     {
-        return $this->lastname;
+        $this->customer = $customer;
+        return $this;
     }
 
-    public function getAddress(): string
+    public function getDate(): DateTime
     {
-        return $this->address;
+        return $this->date;
     }
 
-    public function getCity(): string
+    public function setDate(DateTime $date): DonationEntity
     {
-        return $this->city;
+        $this->date = $date;
+        return $this;
     }
 
-    public function getPostalCode(): string
-    {
-        return $this->postalCode;
-    }
-
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    public function getDonationStart(): DateTime
-    {
-        return $this->donationStart;
-    }
-
-    public function getAmount(): int
+    public function getAmount(): float
     {
         return $this->amount;
     }
 
-    public function getLang(): Language
+    public function setAmount(float $amount): DonationEntity
     {
-        return $this->lang;
+        $this->amount = $amount;
+        return $this;
     }
 
     public function getStripePaymentIntentId(): ?string
@@ -156,6 +118,17 @@ class DonationEntity
     public function setStripePaymentIntentId(?string $stripePaymentIntentId): DonationEntity
     {
         $this->stripePaymentIntentId = $stripePaymentIntentId;
+        return $this;
+    }
+
+    public function getLang(): Language
+    {
+        return $this->lang;
+    }
+
+    public function setLang(Language $lang): DonationEntity
+    {
+        $this->lang = $lang;
         return $this;
     }
 }

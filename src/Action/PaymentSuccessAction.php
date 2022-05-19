@@ -2,10 +2,8 @@
 
 namespace D4rk0snet\Donation\Action;
 
-use D4rk0snet\Donation\Entity\DonationEntity;
 use D4rk0snet\Email\Event\DonationEvent;
 use D4rk0snet\FiscalReceipt\Endpoint\GetFiscalReceiptEndpoint;
-use Hyperion\Doctrine\Service\DoctrineService;
 
 class PaymentSuccessAction
 {
@@ -20,22 +18,13 @@ class PaymentSuccessAction
 
         // Save Payment reference in order
         $donationUuid = $stripePaymentIntent->metadata->adoption_uuid;
-
-        /** @var DonationEntity $entity */
-        $entity = DoctrineService::getEntityManager()->getRepository(DonationEntity::class)->find($donationUuid);
-        if ($entity === null) {
-            return;
-        }
-        $entity->setStripePaymentIntentId($stripePaymentIntent['id']);
-        DoctrineService::getEntityManager()->flush();
-
-        $fiscalReceiptUrl = GetFiscalReceiptEndpoint::getUrl()."?".GetFiscalReceiptEndpoint::ORDER_UUID_PARAM."=".$entity->getUuid();
+        $fiscalReceiptUrl = GetFiscalReceiptEndpoint::getUrl()."?".GetFiscalReceiptEndpoint::ORDER_UUID_PARAM."=".$donationUuid;
 
         // Send email event with data needed
         DonationEvent::send(
-            email: $entity->getEmail(),
+            email: $stripePaymentIntent->metadata->email,
             fiscalReceiptUrl: $fiscalReceiptUrl,
-            lang: $entity->getLang()->value,
+            lang: $stripePaymentIntent->metadata->lang,
         );
     }
 }
