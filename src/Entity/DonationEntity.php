@@ -62,6 +62,11 @@ class DonationEntity
      */
     private ?string $stripePaymentIntentId;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default" : false})
+     */
+    private bool $isPaid = false;
+
     public function __construct(
         CustomerEntity $customer,
         DateTime       $date,
@@ -131,6 +136,17 @@ class DonationEntity
     public function setLang(Language $lang): DonationEntity
     {
         $this->lang = $lang;
+        return $this;
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->isPaid;
+    }
+
+    public function setIsPaid(bool $isPaid): DonationEntity
+    {
+        $this->isPaid = $isPaid;
         return $this;
     }
 }
