@@ -4,6 +4,7 @@ namespace D4rk0snet\Donation\Action;
 
 use D4rk0snet\Donation\Entity\DonationEntity;
 use D4rk0snet\Donation\Entity\RecurringDonationEntity;
+use D4rk0snet\Email\Event\SubscriptionOrder;
 use Hyperion\Doctrine\Service\DoctrineService;
 use Hyperion\Stripe\Service\SubscriptionService;
 use Stripe\PaymentIntent;
@@ -35,5 +36,11 @@ class SubscriptionPaymentSuccess
 
         $entity->setSubscriptionId($subscription->id);
         DoctrineService::getEntityManager()->flush();
+
+        // Send email event with data needed
+        SubscriptionOrder::send(
+            email: $entity->getCustomer()->getEmail(),
+            lang: $stripePaymentIntent->metadata->lang,
+        );
     }
 }
