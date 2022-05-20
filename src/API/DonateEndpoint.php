@@ -2,6 +2,7 @@
 
 namespace D4rk0snet\Donation\API;
 
+use D4rk0snet\Donation\Enums\DonationRecurrencyEnum;
 use D4rk0snet\Donation\Models\DonationModel;
 use D4rk0snet\Donation\Service\DonationService;
 use Hyperion\RestAPI\APIEnpointAbstract;
@@ -23,22 +24,35 @@ class DonateEndpoint extends APIEnpointAbstract
         try {
             $mapper = new JsonMapper();
             $mapper->bExceptionOnMissingData = true;
+            /** @var DonationModel $donationModel */
             $donationModel = $mapper->map($payload, new DonationModel());
         } catch (\Exception $exception) {
             return APIManagement::APIError($exception->getMessage(), 400);
         }
 
-        $donation = DonationService::createDonation($donationModel);
-        $paymentIntent = DonationService::createInvoiceAndGetPaymentIntent($donationModel);
+        if($donationModel->getDonationRecurrency() === DonationRecurrencyEnum::ONESHOT) {
+            $donation = DonationService::createDonation($donationModel);
+            $paymentIntent = DonationService::createInvoiceAndGetPaymentIntentForOneshotDonation($donationModel);
 
-        // Add Donation id to paymentintent
-        StripeService::addMetadataToPaymentIntent($paymentIntent, array_merge(
-            [
-                'donation_uuid' => $donation->getUuid(),
-                'type' => 'donation'
-            ],
-            $donationModel->toArray()
-        ));
+            StripeService::addMetadataToPaymentIntent($paymentIntent, array_merge(
+                [
+                    'donation_uuid' => $donation->getUuid(),
+                    'type' => 'donation'
+                ],
+                $donationModel->toArray()
+            ));
+        } else {
+            $recurringDonation = DonationService::createRecurrentDonation($donationModel);
+            $paymentIntent = DonationService::createInvoiceAndGetPaymentIntentForRecurringDonation($donationModel);
+
+            StripeService::addMetadataToPaymentIntent($paymentIntent, array_merge(
+                [
+                    'donation_uuid' => $recurringDonation->getUuid(),
+                    'type' => 'recurring_donation'
+                ],
+                $donationModel->toArray()
+            ));
+        }
 
         return APIManagement::APIOk([
             'secret' => $paymentIntent->client_secret

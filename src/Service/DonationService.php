@@ -11,6 +11,7 @@ use D4rk0snet\Donation\Models\DonationModel;
 use Hyperion\Doctrine\Service\DoctrineService;
 use Hyperion\Stripe\Service\BillingService;
 use Hyperion\Stripe\Service\CustomerService;
+use Hyperion\Stripe\Service\StripeService;
 use Stripe\PaymentIntent;
 
 class DonationService
@@ -41,7 +42,7 @@ class DonationService
         return $donation;
     }
 
-    public static function createRecurrentDonation(DonationModel $donationModel) : DonationEntity
+    public static function createRecurrentDonation(DonationModel $donationModel) : RecurringDonationEntity
     {
         $customer = DoctrineService::getEntityManager()
             ->getRepository(CustomerEntity::class)
@@ -67,7 +68,33 @@ class DonationService
         return $donation;
     }
 
-    public static function createInvoiceAndGetPaymentIntent(DonationModel $donationModel) : PaymentIntent
+    public static function createInvoiceAndGetPaymentIntentForRecurringDonation(DonationModel $donationModel) : PaymentIntent
+    {
+        $customerEntity = DoctrineService::getEntityManager()
+            ->getRepository(CustomerEntity::class)
+            ->find($donationModel->getCustomerUUID());
+
+        if ($customerEntity === null) {
+            throw new \Exception("Customer not found");
+        }
+
+        $customer = CustomerService::getOrCreateIndividualCustomer(
+            email: $customerEntity->getEmail(),
+            firstName: $customerEntity->getFirstname(),
+            lastName: $customerEntity->getLastname(),
+            metadata: ['type' => $customerEntity instanceof IndividualCustomerEntity ? 'individual' : 'company']
+        );
+
+        return StripeService::createPaymentIntent(
+            amount: $donationModel->getAmount(),
+            customerId: $customer->id,
+            metadata:
+            ['type' => 'recurringSubscription'],
+            isForFutureUsage: true
+        );
+    }
+
+    public static function createInvoiceAndGetPaymentIntentForOneshotDonation(DonationModel $donationModel) : PaymentIntent
     {
         $customer = DoctrineService::getEntityManager()
             ->getRepository(CustomerEntity::class)

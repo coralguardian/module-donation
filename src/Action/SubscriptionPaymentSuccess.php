@@ -9,7 +9,7 @@ class SubscriptionPaymentSuccess
 {
     public static function doAction(PaymentIntent $paymentIntent)
     {
-        if ($paymentIntent->metadata->type !== 'recurringSubscription') {
+        if ($paymentIntent->metadata->type !== 'recurring_donation') {
             return;
         }
 
