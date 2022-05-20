@@ -93,10 +93,14 @@ class DonationModel
         return $this->paymentMethod;
     }
 
-    public function setPaymentMethod(PaymentMethod $paymentMethod): DonationModel
+    public function setPaymentMethod(string $paymentMethod): DonationModel
     {
-        $this->paymentMethod = $paymentMethod;
-        return $this;
+        try {
+            $this->paymentMethod = PaymentMethod::from($paymentMethod);
+            return $this;
+        } catch (\ValueError $exception) {
+            throw new \Exception("PaymentMethod has not a valid value");
+        }
     }
 
     public function toArray() : array
