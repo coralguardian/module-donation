@@ -40,7 +40,7 @@ class DonationModel
 
     public function setAmount(float $amount): DonationModel
     {
-        if($amount < 1) {
+        if ($amount < 1) {
             throw new \Exception("Minimum amount value is 1");
         }
         $this->amount = $amount;
@@ -103,8 +103,14 @@ class DonationModel
         }
     }
 
-    public function toArray() : array
+    public function toArray(): array
     {
-        return get_object_vars($this);
+        return [
+            'customerUUID' => $this->getCustomerUUID(),
+            'amount' => $this->getAmount(),
+            'lang' => $this->getLang()->value,
+            'donationRecurrency' => $this->getDonationRecurrency()->value,
+            'paymentMethod' => $this->getPaymentMethod()->value
+        ];
     }
 }
