@@ -30,7 +30,9 @@ class DonationService
             customer: $customer,
             date: new \DateTime(),
             amount: $donationModel->getAmount(),
-            lang: $donationModel->getLang()
+            lang: $donationModel->getLang(),
+            isPaid: false,
+            paymentMethod: $donationModel->getPaymentMethod()
         );
 
         DoctrineService::getEntityManager()->persist($donation);
@@ -54,7 +56,9 @@ class DonationService
             customer: $customer,
             date: new \DateTime(),
             amount: $donationModel->getAmount(),
-            lang: $donationModel->getLang()
+            lang: $donationModel->getLang(),
+            paymentMethod: $donationModel->getPaymentMethod(),
+            isPaid: false
         );
 
         DoctrineService::getEntityManager()->persist($donation);

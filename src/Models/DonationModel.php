@@ -4,6 +4,7 @@ namespace D4rk0snet\Donation\Models;
 
 use D4rk0snet\Coralguardian\Enums\Language;
 use D4rk0snet\Donation\Enums\DonationRecurrencyEnum;
+use D4rk0snet\Donation\Enums\PaymentMethod;
 
 class DonationModel
 {
@@ -26,6 +27,11 @@ class DonationModel
      * @required
      */
     private DonationRecurrencyEnum $donationRecurrency;
+
+    /**
+     * @required
+     */
+    private PaymentMethod $paymentMethod;
 
     public function getAmount(): float
     {
@@ -79,6 +85,17 @@ class DonationModel
     public function setCustomerUUID(string $customerUUID): DonationModel
     {
         $this->customerUUID = $customerUUID;
+        return $this;
+    }
+
+    public function getPaymentMethod(): PaymentMethod
+    {
+        return $this->paymentMethod;
+    }
+
+    public function setPaymentMethod(PaymentMethod $paymentMethod): DonationModel
+    {
+        $this->paymentMethod = $paymentMethod;
         return $this;
     }
 

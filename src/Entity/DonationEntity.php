@@ -4,6 +4,7 @@ namespace D4rk0snet\Donation\Entity;
 
 use D4rk0snet\Coralguardian\Entity\CustomerEntity;
 use D4rk0snet\Coralguardian\Enums\Language;
+use D4rk0snet\Donation\Enums\PaymentMethod;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
@@ -63,6 +64,11 @@ class DonationEntity
     private ?string $stripePaymentIntentId;
 
     /**
+     * @ORM\Column(type="string", enumType="\D4rk0snet\Donation\Enums\PaymentMethod")
+     */
+    private PaymentMethod $paymentMethod;
+
+    /**
      * @ORM\Column(type="boolean", options={"default" : false})
      */
     private bool $isPaid = false;
@@ -71,12 +77,16 @@ class DonationEntity
         CustomerEntity $customer,
         DateTime       $date,
         float          $amount,
-        Language       $lang
+        Language       $lang,
+        bool           $isPaid,
+        PaymentMethod  $paymentMethod
     ) {
         $this->customer = $customer;
         $this->date = $date;
         $this->amount = $amount;
         $this->lang = $lang;
+        $this->isPaid = $isPaid;
+        $this->paymentMethod = $paymentMethod;
     }
 
     public function getUuid()
@@ -147,6 +157,17 @@ class DonationEntity
     public function setIsPaid(bool $isPaid): DonationEntity
     {
         $this->isPaid = $isPaid;
+        return $this;
+    }
+
+    public function getPaymentMethod(): PaymentMethod
+    {
+        return $this->paymentMethod;
+    }
+
+    public function setPaymentMethod(PaymentMethod $paymentMethod): DonationEntity
+    {
+        $this->paymentMethod = $paymentMethod;
         return $this;
     }
 }
