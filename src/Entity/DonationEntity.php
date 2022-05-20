@@ -73,6 +73,11 @@ class DonationEntity
      */
     private bool $isPaid = false;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $fiscalReceiptNumber;
+
     public function __construct(
         CustomerEntity $customer,
         DateTime       $date,
@@ -168,6 +173,17 @@ class DonationEntity
     public function setPaymentMethod(PaymentMethod $paymentMethod): DonationEntity
     {
         $this->paymentMethod = $paymentMethod;
+        return $this;
+    }
+
+    public function getFiscalReceiptNumber(): ?int
+    {
+        return $this->fiscalReceiptNumber;
+    }
+
+    public function setFiscalReceiptNumber(?int $fiscalReceiptNumber): DonationEntity
+    {
+        $this->fiscalReceiptNumber = $fiscalReceiptNumber;
         return $this;
     }
 }
