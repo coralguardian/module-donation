@@ -2,20 +2,38 @@
 
 namespace D4rk0snet\Donation\Action;
 
+use D4rk0snet\Donation\Entity\DonationEntity;
+use D4rk0snet\Donation\Entity\RecurringDonationEntity;
+use Hyperion\Doctrine\Service\DoctrineService;
 use Hyperion\Stripe\Service\SubscriptionService;
 use Stripe\PaymentIntent;
 
 class SubscriptionPaymentSuccess
 {
-    public static function doAction(PaymentIntent $paymentIntent)
+    public static function doAction(PaymentIntent $stripePaymentIntent)
     {
-        if ($paymentIntent->metadata->type !== 'recurring_donation') {
+        if ($stripePaymentIntent->metadata->type !== 'recurring_donation') {
             return;
         }
 
-        SubscriptionService::createSubscription(
-            customerId: $paymentIntent->customer,
-            amount: $paymentIntent->amount
+        // Save Payment reference in order
+        $donationUuid = $stripePaymentIntent->metadata->donation_uuid;
+        /** @var RecurringDonationEntity $entity */
+        $entity = DoctrineService::getEntityManager()->getRepository(DonationEntity::class)->find($donationUuid);
+
+        if ($entity === null) {
+            return;
+        }
+
+        $entity->setStripePaymentIntentId($stripePaymentIntent->id);
+        $entity->setIsPaid(true);
+
+        $subscription = SubscriptionService::createSubscription(
+            customerId: $stripePaymentIntent->customer,
+            amount: $stripePaymentIntent->amount
         );
+
+        $entity->setSubscriptionId($subscription->id);
+        DoctrineService::getEntityManager()->flush();
     }
 }
