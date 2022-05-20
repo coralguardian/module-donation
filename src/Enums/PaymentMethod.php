@@ -11,7 +11,7 @@ enum PaymentMethod : string
     {
         return match($this) {
             self::CREDIT_CARD => __("CARTE BANCAIRE", "fiscalreceipt"),
-            self::BANK_TRANSFER => __("VIREMENT_BANCAIRE", "fiscalreceipt")
+            self::BANK_TRANSFER => __("VIREMENT BANCAIRE", "fiscalreceipt")
         };
     }
 }
