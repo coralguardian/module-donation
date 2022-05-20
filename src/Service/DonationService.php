@@ -70,24 +70,19 @@ class DonationService
 
     public static function createInvoiceAndGetPaymentIntentForRecurringDonation(DonationModel $donationModel) : PaymentIntent
     {
-        $customerEntity = DoctrineService::getEntityManager()
+        $customer = DoctrineService::getEntityManager()
             ->getRepository(CustomerEntity::class)
             ->find($donationModel->getCustomerUUID());
 
-        if ($customerEntity === null) {
+        if ($customer === null) {
             throw new \Exception("Customer not found");
         }
 
-        $customer = CustomerService::getOrCreateIndividualCustomer(
-            email: $customerEntity->getEmail(),
-            firstName: $customerEntity->getFirstname(),
-            lastName: $customerEntity->getLastname(),
-            metadata: ['type' => $customerEntity instanceof IndividualCustomerEntity ? 'individual' : 'company']
-        );
+        $customerId = self::createStripeCustomer($customer);
 
         return StripeService::createPaymentIntent(
             amount: $donationModel->getAmount(),
-            customerId: $customer->id,
+            customerId: $customerId,
             metadata:
             ['type' => 'recurringSubscription'],
             isForFutureUsage: true
@@ -104,6 +99,26 @@ class DonationService
             throw new \Exception("Customer not found");
         }
 
+        $price  = BillingService::createCustomPrice(
+            $donationModel->getAmount(),
+            DonationRecurrencyEnum::ONESHOT->getStripeProductId()
+        );
+
+        $stripeCustomerId = self::createStripeCustomer($customer);
+
+        BillingService::createLineItem(
+            customerId: $stripeCustomerId,
+            priceId: $price->id,
+            quantity: 1
+        );
+
+        $bill = BillingService::createBill($stripeCustomerId);
+
+        return BillingService::finalizeAndGetPaymentIntent($bill);
+    }
+
+    private static function createStripeCustomer(CustomerEntity $customer) : string
+    {
         if ($customer instanceof IndividualCustomerEntity) {
             $customerId = CustomerService::getOrCreateIndividualCustomer(
                 email: $customer->getEmail(),
@@ -119,19 +134,6 @@ class DonationService
             )->id;
         }
 
-        $price  = BillingService::createCustomPrice(
-            $donationModel->getAmount(),
-            DonationRecurrencyEnum::ONESHOT->getStripeProductId()
-        );
-
-        BillingService::createLineItem(
-            customerId: $customerId,
-            priceId: $price->id,
-            quantity: 1
-        );
-
-        $bill = BillingService::createBill($customerId);
-
-        return BillingService::finalizeAndGetPaymentIntent($bill);
+        return $customerId;
     }
 }
