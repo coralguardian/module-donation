@@ -19,7 +19,8 @@ class PaymentSuccessAction
         }
 
         // Save Payment reference in order
-        $donationUuid = $stripePaymentIntent->metadata->adoption_uuid;
+        $donationUuid = $stripePaymentIntent->metadata->donation_uuid;
+        /** @var DonationEntity $entity */
         $entity = DoctrineService::getEntityManager()->getRepository(DonationEntity::class)->find($donationUuid);
 
         if ($entity === null) {
@@ -32,7 +33,7 @@ class PaymentSuccessAction
 
         // Send email event with data needed
         DonationEvent::send(
-            email: $stripePaymentIntent->metadata->email,
+            email: $entity->getCustomer()->getEmail(),
             fiscalReceiptUrl: FiscalReceiptService::getURl($donationUuid),
             lang: $stripePaymentIntent->metadata->lang,
         );

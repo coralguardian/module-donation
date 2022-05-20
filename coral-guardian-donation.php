@@ -19,3 +19,4 @@ add_filter(\Hyperion\Doctrine\Plugin::ADD_ENTITIES_FILTER, function (array $enti
     return $entitiesPath;
 });
 add_action(StripeEventEnum::PAYMENT_SUCCESS->value, ['\D4rk0snet\Donation\Action\SubscriptionPaymentSuccess','doAction']);
+add_action(StripeEventEnum::PAYMENT_SUCCESS->value, ['\D4rk0snet\Donation\Action\PaymentSuccessAction','doAction']);
