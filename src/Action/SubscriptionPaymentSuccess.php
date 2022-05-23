@@ -4,7 +4,7 @@ namespace D4rk0snet\Donation\Action;
 
 use D4rk0snet\Donation\Entity\DonationEntity;
 use D4rk0snet\Donation\Entity\RecurringDonationEntity;
-use D4rk0snet\Email\Event\SubscriptionOrder;
+use D4rk0snet\Coralguardian\Event\SubscriptionOrder;
 use Hyperion\Doctrine\Service\DoctrineService;
 use Hyperion\Stripe\Service\SubscriptionService;
 use Stripe\PaymentIntent;
