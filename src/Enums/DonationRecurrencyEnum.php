@@ -2,10 +2,10 @@
 
 namespace D4rk0snet\Donation\Enums;
 
-enum DonationRecurrencyEnum : string
+enum DonationRecurrencyEnum: string
 {
-case MONTHLY = 'monthly';
-case ONESHOT = 'oneshot';
+    case MONTHLY = 'monthly';
+    case ONESHOT = 'oneshot';
 
     public function getStripeProductId()
     {

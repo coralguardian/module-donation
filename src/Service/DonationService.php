@@ -2,6 +2,7 @@
 
 namespace D4rk0snet\Donation\Service;
 
+use D4rk0snet\Coralguardian\Entity\CompanyCustomerEntity;
 use D4rk0snet\Coralguardian\Entity\CustomerEntity;
 use D4rk0snet\Coralguardian\Entity\IndividualCustomerEntity;
 use D4rk0snet\Donation\Entity\DonationEntity;
@@ -119,18 +120,18 @@ class DonationService
 
     private static function createStripeCustomer(CustomerEntity $customer) : string
     {
-        if ($customer instanceof IndividualCustomerEntity) {
+        if ($customer instanceof CompanyCustomerEntity) {
+            $customerId = CustomerService::getOrCreateCompanyCustomer(
+                email: $customer->getEmail(),
+                companyName: $customer->getCompanyName(),
+                mainContactName: $customer->getMainContactName()
+            )->id;
+        } else {
             $customerId = CustomerService::getOrCreateIndividualCustomer(
                 email: $customer->getEmail(),
                 firstName: $customer->getFirstname(),
                 lastName: $customer->getLastname(),
                 metadata: ['type' => 'individual']
-            )->id;
-        } else {
-            $customerId = CustomerService::getOrCreateCompanyCustomer(
-                email: $customer->getEmail(),
-                companyName: $customer->getCompanyName(),
-                mainContactName: $customer->getMainContactName()
             )->id;
         }
 

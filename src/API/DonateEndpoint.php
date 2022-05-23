@@ -55,7 +55,7 @@ class DonateEndpoint extends APIEnpointAbstract
         }
 
         return APIManagement::APIOk([
-            'secret' => $paymentIntent->client_secret
+            'clientSecret' => $paymentIntent->client_secret
         ]);
     }
 
