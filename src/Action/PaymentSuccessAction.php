@@ -3,7 +3,7 @@
 namespace D4rk0snet\Donation\Action;
 
 use D4rk0snet\Donation\Entity\DonationEntity;
-use D4rk0snet\Email\Event\DonationEvent;
+use D4rk0snet\Coralguardian\Event\DonationEvent;
 use D4rk0snet\FiscalReceipt\Service\FiscalReceiptService;
 use Hyperion\Doctrine\Service\DoctrineService;
 
