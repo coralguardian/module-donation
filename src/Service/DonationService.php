@@ -4,7 +4,6 @@ namespace D4rk0snet\Donation\Service;
 
 use D4rk0snet\Coralguardian\Entity\CompanyCustomerEntity;
 use D4rk0snet\Coralguardian\Entity\CustomerEntity;
-use D4rk0snet\Coralguardian\Entity\IndividualCustomerEntity;
 use D4rk0snet\Donation\Entity\DonationEntity;
 use D4rk0snet\Donation\Entity\RecurringDonationEntity;
 use D4rk0snet\Donation\Enums\DonationRecurrencyEnum;
