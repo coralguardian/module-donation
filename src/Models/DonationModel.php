@@ -5,6 +5,7 @@ namespace D4rk0snet\Donation\Models;
 use D4rk0snet\Coralguardian\Enums\Language;
 use D4rk0snet\Donation\Enums\DonationRecurrencyEnum;
 use D4rk0snet\Donation\Enums\PaymentMethod;
+use DateTime;
 
 class DonationModel
 {
@@ -32,6 +33,8 @@ class DonationModel
      * @required
      */
     private PaymentMethod $paymentMethod;
+
+    private ?Datetime $date = null;
 
     public function getAmount(): float
     {
@@ -101,6 +104,17 @@ class DonationModel
         } catch (\ValueError $exception) {
             throw new \Exception("PaymentMethod has not a valid value");
         }
+    }
+
+    public function setDate(?DateTime $date): DonationModel
+    {
+        $this->date = $date;
+        return $this;
+    }
+
+    public function getDate(): ?DateTime
+    {
+        return $this->date;
     }
 
     public function toArray(): array

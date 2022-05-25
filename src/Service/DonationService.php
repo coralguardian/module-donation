@@ -29,7 +29,7 @@ class DonationService
         // Sauvegarde en bdd
         $donation = new DonationEntity(
             customer: $customer,
-            date: new \DateTime(),
+            date: $donationModel->getDate() ?? new \DateTime(),
             amount: $donationModel->getAmount(),
             lang: $donationModel->getLang(),
             isPaid: false,
