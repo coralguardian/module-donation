@@ -5,7 +5,7 @@ namespace D4rk0snet\Donation\Enums;
 enum PaymentMethod : string
 {
     case CREDIT_CARD = 'credit_card';
-    case BANK_TRANSFER = 'bank_transfer';
+    case BANK_TRANSFER = 'bank_transfert';
 
     public function getMethodName()
     {
