@@ -2,9 +2,12 @@
 
 namespace D4rk0snet\Donation\API;
 
+use D4rk0snet\Coralguardian\Event\BankTransferPayment;
 use D4rk0snet\Donation\Enums\DonationRecurrencyEnum;
+use D4rk0snet\Donation\Enums\PaymentMethod;
 use D4rk0snet\Donation\Models\DonationModel;
 use D4rk0snet\Donation\Service\DonationService;
+use Hyperion\Doctrine\Service\DoctrineService;
 use Hyperion\RestAPI\APIEnpointAbstract;
 use Hyperion\RestAPI\APIManagement;
 use Hyperion\Stripe\Service\StripeService;
@@ -32,6 +35,14 @@ class DonateEndpoint extends APIEnpointAbstract
 
         if($donationModel->getDonationRecurrency() === DonationRecurrencyEnum::ONESHOT) {
             $donation = DonationService::createDonation($donationModel);
+
+            if($donation->getPaymentMethod() === PaymentMethod::BANK_TRANSFER) {
+                BankTransferPayment::sendEvent($donation);
+                DoctrineService::getEntityManager()->commit();
+
+                return APIManagement::APIOk(["uuid" => $donation->getUuid()]);
+            }
+
             $paymentIntent = DonationService::createInvoiceAndGetPaymentIntentForOneshotDonation($donationModel);
 
             StripeService::addMetadataToPaymentIntent($paymentIntent, array_merge(
