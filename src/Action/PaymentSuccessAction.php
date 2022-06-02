@@ -2,9 +2,8 @@
 
 namespace D4rk0snet\Donation\Action;
 
-use D4rk0snet\Donation\Entity\DonationEntity;
 use D4rk0snet\Coralguardian\Event\DonationEvent;
-use D4rk0snet\FiscalReceipt\Service\FiscalReceiptService;
+use D4rk0snet\Donation\Entity\DonationEntity;
 use Hyperion\Doctrine\Service\DoctrineService;
 
 class PaymentSuccessAction
@@ -32,10 +31,6 @@ class PaymentSuccessAction
         DoctrineService::getEntityManager()->flush();
 
         // Send email event with data needed
-        DonationEvent::send(
-            email: $entity->getCustomer()->getEmail(),
-            fiscalReceiptUrl: FiscalReceiptService::getURl($donationUuid),
-            lang: $stripePaymentIntent->metadata->lang,
-        );
+        DonationEvent::sendEvent($entity);
     }
 }

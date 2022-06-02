@@ -38,9 +38,6 @@ class SubscriptionPaymentSuccess
         DoctrineService::getEntityManager()->flush();
 
         // Send email event with data needed
-        SubscriptionOrder::send(
-            email: $entity->getCustomer()->getEmail(),
-            lang: $stripePaymentIntent->metadata->lang,
-        );
+        SubscriptionOrder::sendEvent($entity);
     }
 }
