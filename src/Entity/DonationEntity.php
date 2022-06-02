@@ -7,21 +7,13 @@ use D4rk0snet\Coralguardian\Enums\Language;
 use D4rk0snet\Donation\Enums\PaymentMethod;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\CustomIdGenerator;
-use Doctrine\ORM\Mapping\DiscriminatorColumn;
-use Doctrine\ORM\Mapping\DiscriminatorMap;
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\InheritanceType;
 
 /**
- * @Entity
+ * @ORM\Entity
  * @ORM\Table(name="donation")
- * @InheritanceType("JOINED")
- * @DiscriminatorColumn(name="discr", type="string")
- * @DiscriminatorMap({
+ * @ORM\InheritanceType("JOINED")
+ * @ORM\DiscriminatorColumn(name="discr", type="string")
+ * @ORM\DiscriminatorMap({
  *     "uniqueDonation" = "\D4rk0snet\Donation\Entity\DonationEntity",
  *     "recurrentDonation" = "\D4rk0snet\Donation\Entity\RecurringDonationEntity",
  *     "regularAdoption" = "\D4rk0snet\Adoption\Entity\AdoptionEntity",
@@ -31,10 +23,10 @@ use Doctrine\ORM\Mapping\InheritanceType;
 class DonationEntity
 {
     /**
-     * @Id
-     * @Column(type="uuid_binary_ordered_time", unique=true)
-     * @GeneratedValue(strategy="CUSTOM")
-     * @CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator")
+     * @ORM\Id
+     * @ORM\Column(type="uuid_binary_ordered_time", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator")
      */
     private $uuid;
 
