@@ -33,12 +33,12 @@ class DonateEndpoint extends APIEnpointAbstract
             return APIManagement::APIError($exception->getMessage(), 400);
         }
 
-        if($donationModel->getDonationRecurrency() === DonationRecurrencyEnum::ONESHOT) {
+        if ($donationModel->getDonationRecurrency() === DonationRecurrencyEnum::ONESHOT) {
             $donation = DonationService::createDonation($donationModel);
 
-            if($donation->getPaymentMethod() === PaymentMethod::BANK_TRANSFER) {
+            if ($donation->getPaymentMethod() === PaymentMethod::BANK_TRANSFER) {
                 BankTransferPayment::sendEvent($donation);
-                DoctrineService::getEntityManager()->commit();
+                DoctrineService::getEntityManager()->flush();
 
                 return APIManagement::APIOk(["uuid" => $donation->getUuid()]);
             }
