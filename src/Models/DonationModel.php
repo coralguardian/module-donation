@@ -43,9 +43,9 @@ class DonationModel
 
     public function setAmount(float $amount): DonationModel
     {
-        if ($amount < 1) {
-            throw new \Exception("Minimum amount value is 1");
-        }
+//        if ($amount < 1) {
+//            throw new \Exception("Minimum amount value is 1");
+//        }
         $this->amount = $amount;
         return $this;
     }
