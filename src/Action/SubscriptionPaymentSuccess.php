@@ -13,7 +13,7 @@ class SubscriptionPaymentSuccess
 {
     public static function doAction(PaymentIntent $stripePaymentIntent)
     {
-        if ($stripePaymentIntent->metadata->type !== 'recurring_donation') {
+        if ($stripePaymentIntent->metadata->type !== "recurring_donation") {
             return;
         }
 
@@ -31,7 +31,8 @@ class SubscriptionPaymentSuccess
 
         $subscription = SubscriptionService::createSubscription(
             customerId: $stripePaymentIntent->customer,
-            amount: $stripePaymentIntent->amount
+            amount: $stripePaymentIntent->amount,
+            defaultPaymentMethod: $stripePaymentIntent->payment_method
         );
 
         $entity->setSubscriptionId($subscription->id);
