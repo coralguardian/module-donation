@@ -6,6 +6,7 @@ use D4rk0snet\Coralguardian\Enums\Language;
 use D4rk0snet\Donation\Enums\DonationRecurrencyEnum;
 use D4rk0snet\Donation\Enums\PaymentMethod;
 use DateTime;
+use Exception;
 
 class DonationModel
 {
@@ -35,6 +36,13 @@ class DonationModel
     private PaymentMethod $paymentMethod;
 
     private ?Datetime $date = null;
+
+    public function afterMapping()
+    {
+        if($this->amount < 1) {
+            throw new Exception("Amount can not be < 1€");
+        }
+    }
 
     public function getAmount(): float
     {

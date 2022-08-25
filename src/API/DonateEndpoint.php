@@ -27,6 +27,7 @@ class DonateEndpoint extends APIEnpointAbstract
         try {
             $mapper = new JsonMapper();
             $mapper->bExceptionOnMissingData = true;
+            $mapper->postMappingMethod = 'afterMapping';
             /** @var DonationModel $donationModel */
             $donationModel = $mapper->map($payload, new DonationModel());
         } catch (\Exception $exception) {
