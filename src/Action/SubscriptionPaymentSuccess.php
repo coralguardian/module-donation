@@ -5,9 +5,12 @@ namespace D4rk0snet\Donation\Action;
 use D4rk0snet\Donation\Entity\DonationEntity;
 use D4rk0snet\Donation\Entity\RecurringDonationEntity;
 use D4rk0snet\Coralguardian\Event\SubscriptionOrder;
+use D4rk0snet\Donation\Enums\DonationRecurrencyEnum;
 use Hyperion\Doctrine\Service\DoctrineService;
+use Hyperion\Stripe\Service\ProductService;
 use Hyperion\Stripe\Service\SubscriptionService;
 use Stripe\PaymentIntent;
+use Stripe\Product;
 
 class SubscriptionPaymentSuccess
 {
@@ -29,10 +32,19 @@ class SubscriptionPaymentSuccess
         $entity->setStripePaymentIntentId($stripePaymentIntent->id);
         $entity->setIsPaid(true);
 
+        $stripeSearchResults = ProductService::getProductByMetadata(['metadata' => ['key' => DonationRecurrencyEnum::MONTHLY->value]]);
+        if($stripeSearchResults->count() === 0) {
+            throw new \Exception("Impossible de trouver l'article dans stripe !");
+        }
+
+        /** @var Product $stripeProduct */
+        $stripeProduct = $stripeSearchResults->first();
+
         $subscription = SubscriptionService::createSubscription(
             customerId: $stripePaymentIntent->customer,
             amount: $stripePaymentIntent->amount,
-            defaultPaymentMethod: $stripePaymentIntent->payment_method
+            defaultPaymentMethod: $stripePaymentIntent->payment_method,
+            productId: $stripeProduct->id
         );
 
         $entity->setSubscriptionId($subscription->id);

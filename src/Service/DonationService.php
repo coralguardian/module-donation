@@ -9,10 +9,14 @@ use D4rk0snet\Donation\Entity\RecurringDonationEntity;
 use D4rk0snet\Donation\Enums\DonationRecurrencyEnum;
 use D4rk0snet\Donation\Models\DonationModel;
 use Hyperion\Doctrine\Service\DoctrineService;
+use Hyperion\Stripe\Model\PriceSearchModel;
+use Hyperion\Stripe\Model\ProductSearchModel;
 use Hyperion\Stripe\Service\BillingService;
 use Hyperion\Stripe\Service\CustomerService;
+use Hyperion\Stripe\Service\SearchService;
 use Hyperion\Stripe\Service\StripeService;
 use Stripe\PaymentIntent;
+use Stripe\Price;
 
 class DonationService
 {
@@ -99,16 +103,32 @@ class DonationService
             throw new \Exception("Customer not found");
         }
 
-        $price  = BillingService::createCustomPrice(
-            $donationModel->getAmount(),
-            DonationRecurrencyEnum::ONESHOT->getStripeProductId()
-        );
+        $searchProductModel = (new ProductSearchModel())->addMetadata(['key' => DonationRecurrencyEnum::ONESHOT->value]);
+        $stripeProduct = SearchService::searchProduct($searchProductModel)->first();
+        if($stripeProduct === null) {
+            throw new \Exception("Impossible de trouver le produit de don avec la clef ".DonationRecurrencyEnum::ONESHOT->value);
+        }
+
+        // On cherche si ce prix a déjà été créé pour ce produit.
+        $priceSearchModel = (new PriceSearchModel())->setProduct($stripeProduct->id);
+        $stripeProductPrices = SearchService::searchPrice($priceSearchModel);
+        $price = array_filter($stripeProductPrices->toArray(), static function(Price $stripeProductPrice) use ($donationModel) {
+            return $stripeProductPrice->unit_amount === $donationModel->getAmount();
+        });
+        if(count($price)) {
+            $productPrice = current($price);
+        } else {
+            $productPrice = BillingService::createCustomPrice(
+                $donationModel->getAmount(),
+                $stripeProduct->id
+            );
+        }
 
         $stripeCustomerId = self::createStripeCustomer($customer);
 
         BillingService::createLineItem(
             customerId: $stripeCustomerId,
-            priceId: $price->id,
+            priceId: $productPrice->id,
             quantity: 1
         );
 
