@@ -28,7 +28,7 @@ class NewOrderListener
                 ->setDonationRecurrency($donationOrderModel->getDonationRecurrency())
                 ->setIsPaid(true); // @todo : ce ne sera pas le cas pour le virement bancaire !
 
-            do_action(CoralDonationActions::PENDING_DONATION, $donationModel);
+            do_action(CoralDonationActions::PENDING_DONATION->value, $donationModel);
         }
     }
 }

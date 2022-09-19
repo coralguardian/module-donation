@@ -18,11 +18,11 @@ class CreateDonation
         $em = DoctrineService::getEntityManager();
 
         // Au cas ou le customer n'existe pas on demande sa création
-        do_action(CoralCustomerActions::NEW_CUSTOMER, $donationModel->getCustomerModel());
+        do_action(CoralCustomerActions::NEW_CUSTOMER->value, $donationModel->getCustomerModel());
 
         // Récupération du customer
         $customerEntity = apply_filter(
-            CoralCustomerFilters::GET_CUSTOMER,
+            CoralCustomerFilters::GET_CUSTOMER->value,
             null,
             $donationModel->getCustomerModel()->getEmail(),
             $donationModel->getCustomerModel()->getCustomerType()
@@ -51,6 +51,6 @@ class CreateDonation
         $em->persist($donationEntity);
         $em->flush($donationEntity);
 
-        do_action(CoralDonationActions::NEW_DONATION, $donationModel, $donationEntity);
+        do_action(CoralDonationActions::NEW_DONATION->value, $donationModel, $donationEntity);
     }
 }
