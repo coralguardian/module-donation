@@ -22,7 +22,7 @@ class NewOrderListener
             $donationModel
                 ->setAmount($donationOrderModel->getAmount())
                 ->setCustomerModel($model->getCustomer())
-                ->setLang($model->getLanguage())
+                ->setLang($model->getLang())
                 ->setPaymentMethod($model->getPaymentMethod())
                 ->setDate(new \DateTime())
                 ->setDonationRecurrency($donationOrderModel->getDonationRecurrency())
