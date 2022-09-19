@@ -2,18 +2,19 @@
 
 namespace D4rk0snet\Donation\Models;
 
+use D4rk0snet\CoralCustomer\Model\CustomerModel;
 use D4rk0snet\Coralguardian\Enums\Language;
+use D4rk0snet\CoralOrder\Enums\PaymentMethod;
 use D4rk0snet\Donation\Enums\DonationRecurrencyEnum;
-use D4rk0snet\Donation\Enums\PaymentMethod;
 use DateTime;
 use Exception;
 
-class DonationModel
+class DonationModel implements \JsonSerializable
 {
     /**
      * @required
      */
-    private string $customerUUID;
+    private CustomerModel $customerModel;
 
     /**
      * @required
@@ -36,6 +37,8 @@ class DonationModel
     private PaymentMethod $paymentMethod;
 
     private ?Datetime $date = null;
+
+    private bool $isPaid = false;
 
     public function afterMapping()
     {
@@ -63,14 +66,11 @@ class DonationModel
         return $this->donationRecurrency;
     }
 
-    public function setDonationRecurrency(string $donationRecurrency): DonationModel
+    public function setDonationRecurrency(DonationRecurrencyEnum $donationRecurrency): DonationModel
     {
-        try {
-            $this->donationRecurrency = DonationRecurrencyEnum::from($donationRecurrency);
-            return $this;
-        } catch (\ValueError $exception) {
-            throw new \Exception("Donation recurrency is not a valid one");
-        }
+        $this->donationRecurrency = $donationRecurrency;
+
+        return $this;
     }
 
     public function getLang(): Language
@@ -78,24 +78,9 @@ class DonationModel
         return $this->lang;
     }
 
-    public function setLang(string $lang): DonationModel
+    public function setLang(Language $lang): DonationModel
     {
-        try {
-            $this->lang = Language::from($lang);
-            return $this;
-        } catch (\ValueError $exception) {
-            throw new \Exception("Language has not a valid value");
-        }
-    }
-
-    public function getCustomerUUID(): string
-    {
-        return $this->customerUUID;
-    }
-
-    public function setCustomerUUID(string $customerUUID): DonationModel
-    {
-        $this->customerUUID = $customerUUID;
+        $this->lang = $lang;
         return $this;
     }
 
@@ -104,14 +89,10 @@ class DonationModel
         return $this->paymentMethod;
     }
 
-    public function setPaymentMethod(string $paymentMethod): DonationModel
+    public function setPaymentMethod(PaymentMethod $paymentMethod): DonationModel
     {
-        try {
-            $this->paymentMethod = PaymentMethod::from($paymentMethod);
-            return $this;
-        } catch (\ValueError $exception) {
-            throw new \Exception("PaymentMethod has not a valid value");
-        }
+        $this->paymentMethod = $paymentMethod;
+        return $this;
     }
 
     public function setDate(?DateTime $date): DonationModel
@@ -125,14 +106,37 @@ class DonationModel
         return $this->date;
     }
 
-    public function toArray(): array
+    public function getCustomerModel(): CustomerModel
+    {
+        return $this->customerModel;
+    }
+
+    public function setCustomerModel(CustomerModel $customerModel): DonationModel
+    {
+        $this->customerModel = $customerModel;
+        return $this;
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->isPaid;
+    }
+
+    public function setIsPaid(bool $isPaid): DonationModel
+    {
+        $this->isPaid = $isPaid;
+        return $this;
+    }
+
+    public function jsonSerialize()
     {
         return [
-            'customerUUID' => $this->getCustomerUUID(),
+            'customerModel' => $this->getCustomerModel(),
             'amount' => $this->getAmount(),
             'lang' => $this->getLang()->value,
             'donationRecurrency' => $this->getDonationRecurrency()->value,
-            'paymentMethod' => $this->getPaymentMethod()->value
+            'paymentMethod' => $this->getPaymentMethod()->value,
+            'isPaid' => $this->isPaid()
         ];
     }
 }

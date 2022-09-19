@@ -2,9 +2,9 @@
 
 namespace D4rk0snet\Donation\Entity;
 
-use D4rk0snet\Coralguardian\Entity\CustomerEntity;
+use D4rk0snet\CoralCustomer\Entity\CustomerEntity;
 use D4rk0snet\Coralguardian\Enums\Language;
-use D4rk0snet\Donation\Enums\PaymentMethod;
+use D4rk0snet\CoralOrder\Enums\PaymentMethod;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,7 +31,7 @@ class DonationEntity
     private $uuid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\D4rk0snet\Coralguardian\Entity\CustomerEntity")
+     * @ORM\ManyToOne(targetEntity="\D4rk0snet\CoralCustomer\Entity\CustomerEntity")
      * @ORM\JoinColumn(name="customer", referencedColumnName="uuid")
      */
     private CustomerEntity $customer;
@@ -57,7 +57,7 @@ class DonationEntity
     private ?string $stripePaymentIntentId;
 
     /**
-     * @ORM\Column(type="string", enumType="\D4rk0snet\Donation\Enums\PaymentMethod")
+     * @ORM\Column(type="string", enumType="\D4rk0snet\CoralOrder\Enums\PaymentMethod")
      */
     private PaymentMethod $paymentMethod;
 
