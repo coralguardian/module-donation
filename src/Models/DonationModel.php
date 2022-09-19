@@ -40,6 +40,8 @@ class DonationModel implements \JsonSerializable
 
     private bool $isPaid = false;
 
+    private string $stripePaymentIntentId;
+
     public function afterMapping()
     {
         if($this->amount < 1) {
@@ -125,6 +127,17 @@ class DonationModel implements \JsonSerializable
     public function setIsPaid(bool $isPaid): DonationModel
     {
         $this->isPaid = $isPaid;
+        return $this;
+    }
+
+    public function getStripePaymentIntentId(): string
+    {
+        return $this->stripePaymentIntentId;
+    }
+
+    public function setStripePaymentIntentId(string $stripePaymentIntentId): DonationModel
+    {
+        $this->stripePaymentIntentId = $stripePaymentIntentId;
         return $this;
     }
 
