@@ -17,7 +17,7 @@ use D4rk0snet\Donation\Listener\NewOrderListener;
 
 add_action('init', ['\D4rk0snet\Donation\Plugin','init']);
 add_action(CoralDonationActions::PENDING_DONATION->value, [CreateDonation::class,'doAction'], 10, 2);
-add_filter(CoralOrderEvents::NEW_ORDER->value, [NewOrderListener::class, 'doAction']);
+add_filter(CoralOrderEvents::NEW_ORDER->value, [NewOrderListener::class, 'doAction'], 10, 2);
 
 add_filter(\Hyperion\Doctrine\Plugin::ADD_ENTITIES_FILTER, function (array $entitiesPath) {
     $entitiesPath[] = __DIR__."/src/Entity";
