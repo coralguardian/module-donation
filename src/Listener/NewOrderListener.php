@@ -5,13 +5,14 @@ namespace D4rk0snet\Donation\Listener;
 use D4rk0snet\CoralOrder\Model\OrderModel;
 use D4rk0snet\Donation\Enums\CoralDonationActions;
 use D4rk0snet\Donation\Models\DonationModel;
+use Stripe\PaymentIntent;
 
 /**
  * Cette classe écoute l'action NEW_ORDER du module order
  */
 class NewOrderListener
 {
-    public static function doAction(OrderModel $model)
+    public static function doAction(OrderModel $model, PaymentIntent $paymentIntent)
     {
         if(count($model->getDonationOrdered()) === 0) {
             return;
@@ -26,7 +27,8 @@ class NewOrderListener
                 ->setPaymentMethod($model->getPaymentMethod())
                 ->setDate(new \DateTime())
                 ->setDonationRecurrency($donationOrderModel->getDonationRecurrency())
-                ->setIsPaid(true); // @todo : ce ne sera pas le cas pour le virement bancaire !
+                ->setIsPaid(true) // @todo : ce ne sera pas le cas pour le virement bancaire !
+                ->setStripePaymentIntentId($paymentIntent->id);
 
             do_action(CoralDonationActions::PENDING_DONATION->value, $donationModel);
         }

@@ -48,6 +48,8 @@ class CreateDonation
             );
         }
 
+        $donationEntity->setStripePaymentIntentId($donationModel->getStripePaymentIntentId());
+
         $em->persist($donationEntity);
         $em->flush($donationEntity);
 
