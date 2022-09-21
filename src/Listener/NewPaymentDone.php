@@ -28,9 +28,9 @@ class NewPaymentDone
             return;
         }
 
-        $customerModel = $mapper->map(json_decode($stripePaymentIntent->metadata['customer'], true, 512, JSON_THROW_ON_ERROR), new CustomerModel());
+        $customerModel = $mapper->map(json_decode($stripePaymentIntent->metadata['customer'], false, 512, JSON_THROW_ON_ERROR), new CustomerModel());
         /** @var DonationOrderModel $donationOrderModel */
-        $donationOrderModel = $mapper->map(json_decode($stripePaymentIntent->metadata['donationOrdered'], true, 512, JSON_THROW_ON_ERROR), new DonationOrderModel());
+        $donationOrderModel = $mapper->map(json_decode($stripePaymentIntent->metadata['donationOrdered'], false, 512, JSON_THROW_ON_ERROR), new DonationOrderModel());
 
         $donationModel = new DonationModel();
         $donationModel
