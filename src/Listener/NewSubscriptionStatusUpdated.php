@@ -8,7 +8,6 @@ use D4rk0snet\CoralOrder\Enums\PaymentMethod;
 use D4rk0snet\Donation\Enums\CoralDonationActions;
 use D4rk0snet\Donation\Enums\DonationRecurrencyEnum;
 use D4rk0snet\Donation\Models\DonationModel;
-use Hyperion\Stripe\Service\StripeService;
 use JsonMapper;
 use Stripe\Subscription;
 
@@ -21,8 +20,7 @@ class NewSubscriptionStatusUpdated
     {
         // Si il s'agit d'un don mensuel qui vient d'être validé(payé et moyen de paiement valide)
         // Alors on peut l'enregistrer en base
-        if($subscription->previous_attributes->status === 'incomplete' &&
-            $subscription->status === 'active' ) {
+        if( $subscription->status === 'active' ) {
 
             $mapper = new JsonMapper();
             $mapper->bExceptionOnMissingData = true;
