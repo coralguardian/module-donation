@@ -8,6 +8,7 @@ use D4rk0snet\CoralOrder\Enums\PaymentMethod;
 use D4rk0snet\Donation\Enums\CoralDonationActions;
 use D4rk0snet\Donation\Enums\DonationRecurrencyEnum;
 use D4rk0snet\Donation\Models\DonationModel;
+use Hyperion\Stripe\Service\StripeService;
 use JsonMapper;
 use Stripe\Subscription;
 
