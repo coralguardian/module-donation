@@ -5,6 +5,7 @@ namespace D4rk0snet\Donation\Listener;
 use D4rk0snet\CoralCustomer\Model\CustomerModel;
 use D4rk0snet\Coralguardian\Enums\Language;
 use D4rk0snet\CoralOrder\Enums\PaymentMethod;
+use D4rk0snet\CoralOrder\Enums\Project;
 use D4rk0snet\CoralOrder\Model\DonationOrderModel;
 use D4rk0snet\Donation\Enums\CoralDonationActions;
 use D4rk0snet\Donation\Enums\DonationRecurrencyEnum;
@@ -40,6 +41,7 @@ class NewPaymentDone
             ->setIsPaid(true)
             ->setDate(new \DateTime())
             ->setPaymentMethod(PaymentMethod::CREDIT_CARD)
+            ->setProject(Project::from($donationOrderModel->getProject()))
             ->setLang(Language::from($stripePaymentIntent->metadata['language'])) // @todo: Est ce que la langue a réellement du sens dans un don ?
             ->setCustomerModel($customerModel);
 

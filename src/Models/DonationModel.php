@@ -5,6 +5,7 @@ namespace D4rk0snet\Donation\Models;
 use D4rk0snet\CoralCustomer\Model\CustomerModel;
 use D4rk0snet\Coralguardian\Enums\Language;
 use D4rk0snet\CoralOrder\Enums\PaymentMethod;
+use D4rk0snet\CoralOrder\Enums\Project;
 use D4rk0snet\Donation\Enums\DonationRecurrencyEnum;
 use DateTime;
 use Exception;
@@ -35,6 +36,11 @@ class DonationModel implements \JsonSerializable
      * @required
      */
     private PaymentMethod $paymentMethod;
+
+    /**
+     * @required
+     */
+    private Project $project;
 
     private ?Datetime $date = null;
 
@@ -141,6 +147,24 @@ class DonationModel implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * @return Project
+     */
+    public function getProject(): Project
+    {
+        return $this->project;
+    }
+
+    /**
+     * @param Project $project
+     * @return DonationModel
+     */
+    public function setProject(Project $project): DonationModel
+    {
+        $this->project = $project;
+        return $this;
+    }
+
     public function jsonSerialize()
     {
         return [
@@ -149,7 +173,8 @@ class DonationModel implements \JsonSerializable
             'lang' => $this->getLang()->value,
             'donationRecurrency' => $this->getDonationRecurrency()->value,
             'paymentMethod' => $this->getPaymentMethod()->value,
-            'isPaid' => $this->isPaid()
+            'isPaid' => $this->isPaid(),
+            'project' => $this->project
         ];
     }
 }

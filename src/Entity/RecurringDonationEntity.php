@@ -5,6 +5,7 @@ namespace D4rk0snet\Donation\Entity;
 use D4rk0snet\CoralCustomer\Entity\CustomerEntity;
 use D4rk0snet\Coralguardian\Enums\Language;
 use D4rk0snet\CoralOrder\Enums\PaymentMethod;
+use D4rk0snet\CoralOrder\Enums\Project;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Entity;
@@ -26,7 +27,9 @@ class RecurringDonationEntity extends DonationEntity
         float          $amount,
         Language       $lang,
         PaymentMethod  $paymentMethod,
-        bool           $isPaid)
+        bool           $isPaid,
+        Project        $project
+    )
     {
         parent::__construct(
             customer: $customer,
@@ -34,7 +37,8 @@ class RecurringDonationEntity extends DonationEntity
             amount: $amount,
             lang: $lang,
             isPaid: $isPaid,
-            paymentMethod: $paymentMethod
+            paymentMethod: $paymentMethod,
+            project: $project
         );
     }
 

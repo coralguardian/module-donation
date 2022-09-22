@@ -5,6 +5,8 @@ namespace D4rk0snet\Donation\Listener;
 use D4rk0snet\CoralCustomer\Model\CustomerModel;
 use D4rk0snet\Coralguardian\Enums\Language;
 use D4rk0snet\CoralOrder\Enums\PaymentMethod;
+use D4rk0snet\CoralOrder\Enums\Project;
+use D4rk0snet\CoralOrder\Model\DonationOrderModel;
 use D4rk0snet\Donation\Enums\CoralDonationActions;
 use D4rk0snet\Donation\Enums\DonationRecurrencyEnum;
 use D4rk0snet\Donation\Models\DonationModel;
@@ -26,6 +28,7 @@ class NewSubscriptionStatusUpdated
             $mapper->bExceptionOnMissingData = true;
             $mapper->postMappingMethod = 'afterMapping';
             $customerModel = $mapper->map(json_decode($subscription->metadata['customerModel'], false, 512, JSON_THROW_ON_ERROR), new CustomerModel());
+            $donationOrderModel = $mapper->map(json_decode($subscription->metadata['donationOrderedModel'], false, 512, JSON_THROW_ON_ERROR), new DonationOrderModel());
 
             $donationModel = new DonationModel();
             $donationModel
@@ -35,6 +38,7 @@ class NewSubscriptionStatusUpdated
                 ->setIsPaid(true)
                 ->setDate(new \DateTime())
                 ->setPaymentMethod(PaymentMethod::CREDIT_CARD)
+                ->setProject(Project::from($donationOrderModel->getProject()))
                 ->setLang(Language::FR) // @todo: Est ce que la langue a réellement du sens dans un don mensuel?
                 ->setCustomerModel($customerModel);
 
