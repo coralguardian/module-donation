@@ -35,7 +35,8 @@ class CreateDonation
                 amount: $donationModel->getAmount(),
                 lang: $donationModel->getLang(),
                 isPaid: $donationModel->isPaid(),
-                paymentMethod: $donationModel->getPaymentMethod()
+                paymentMethod: $donationModel->getPaymentMethod(),
+                project: $donationModel->getProject()
             );
         } else {
             $donationEntity = new RecurringDonationEntity(
@@ -44,7 +45,8 @@ class CreateDonation
                 amount: $donationModel->getAmount(),
                 lang: $donationModel->getLang(),
                 paymentMethod: $donationModel->getPaymentMethod(),
-                isPaid: $donationModel->isPaid()
+                isPaid: $donationModel->isPaid(),
+                project: $donationModel->getProject()
             );
         }
 

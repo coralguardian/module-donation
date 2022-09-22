@@ -5,6 +5,7 @@ namespace D4rk0snet\Donation\Entity;
 use D4rk0snet\CoralCustomer\Entity\CustomerEntity;
 use D4rk0snet\Coralguardian\Enums\Language;
 use D4rk0snet\CoralOrder\Enums\PaymentMethod;
+use D4rk0snet\CoralOrder\Enums\Project;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -62,6 +63,11 @@ class DonationEntity
     private PaymentMethod $paymentMethod;
 
     /**
+     * @ORM\Column(type="string", enumType="\D4rk0snet\CoralOrder\Enums\Project", options={"default": \D4rk0snet\CoralOrder\Enums\Project::INDONESIA})
+     */
+    private Project $project;
+
+    /**
      * @ORM\Column(type="boolean", options={"default" : false})
      */
     private bool $isPaid = false;
@@ -77,7 +83,8 @@ class DonationEntity
         float          $amount,
         Language       $lang,
         bool           $isPaid,
-        PaymentMethod  $paymentMethod
+        PaymentMethod  $paymentMethod,
+        Project $project
     ) {
         $this->customer = $customer;
         $this->date = $date;
@@ -85,6 +92,7 @@ class DonationEntity
         $this->lang = $lang;
         $this->isPaid = $isPaid;
         $this->paymentMethod = $paymentMethod;
+        $this->project = $project;
     }
 
     public function getUuid()
@@ -166,6 +174,17 @@ class DonationEntity
     public function setPaymentMethod(PaymentMethod $paymentMethod): DonationEntity
     {
         $this->paymentMethod = $paymentMethod;
+        return $this;
+    }
+
+    public function getProject(): Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(Project $project): DonationEntity
+    {
+        $this->project = $project;
         return $this;
     }
 
