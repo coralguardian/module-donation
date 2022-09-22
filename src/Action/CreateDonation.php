@@ -23,7 +23,6 @@ class CreateDonation
         // Récupération du customer
         $customerEntity = apply_filters(
             CoralCustomerFilters::GET_CUSTOMER->value,
-            null,
             $donationModel->getCustomerModel()->getEmail(),
             $donationModel->getCustomerModel()->getCustomerType()
         );
