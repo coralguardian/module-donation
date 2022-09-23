@@ -46,7 +46,7 @@ class DonationModel implements \JsonSerializable
 
     private bool $isPaid = false;
 
-    private string $stripePaymentIntentId;
+    private ?string $stripePaymentIntentId;
 
     public function afterMapping()
     {
@@ -136,12 +136,12 @@ class DonationModel implements \JsonSerializable
         return $this;
     }
 
-    public function getStripePaymentIntentId(): string
+    public function getStripePaymentIntentId(): ?string
     {
         return $this->stripePaymentIntentId;
     }
 
-    public function setStripePaymentIntentId(string $stripePaymentIntentId): DonationModel
+    public function setStripePaymentIntentId(?string $stripePaymentIntentId): DonationModel
     {
         $this->stripePaymentIntentId = $stripePaymentIntentId;
         return $this;
