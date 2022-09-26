@@ -27,13 +27,13 @@ class NewPaymentDone
 
         // Si c'est un don unique, nous aurons le donationOrder dans les metas de l'invoice
         $invoice = StripeService::getStripeClient()->invoices->retrieve($stripePaymentIntent->invoice);
-        if($invoice->metadata['donationOrdered'] === null) {
+        if($invoice->metadata['oneshotDonation'] === null) {
             return;
         }
 
         $customerModel = $mapper->map(json_decode($invoice->metadata['customer'], false, 512, JSON_THROW_ON_ERROR), new CustomerModel());
         /** @var DonationOrderModel $donationOrderModel */
-        $donationOrderModel = $mapper->map(json_decode($invoice->metadata['donationOrdered'], false, 512, JSON_THROW_ON_ERROR), new DonationOrderModel());
+        $donationOrderModel = $mapper->map(json_decode($invoice->metadata['oneshotDonation'], false, 512, JSON_THROW_ON_ERROR), new DonationOrderModel());
 
         $donationModel = new DonationModel();
         $donationModel
