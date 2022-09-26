@@ -26,7 +26,7 @@ class NewSubscriptionStatusUpdated
             $mapper = new JsonMapper();
             $mapper->bExceptionOnMissingData = true;
             $mapper->postMappingMethod = 'afterMapping';
-            $customerModel = $mapper->map(json_decode($subscription->metadata['customerModel'], false, 512, JSON_THROW_ON_ERROR), new CustomerModel());
+            $customerModel = $mapper->map(json_decode($subscription->metadata['customer'], false, 512, JSON_THROW_ON_ERROR), new CustomerModel());
             $donationOrderModel = $mapper->map(json_decode($subscription->metadata['donationOrderedModel'], false, 512, JSON_THROW_ON_ERROR), new DonationOrderModel());
 
             $donationModel = new DonationModel();
