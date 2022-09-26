@@ -22,7 +22,8 @@ class NewSubscriptionStatusUpdated
     {
         // Si il s'agit d'un don mensuel qui vient d'être validé(payé et moyen de paiement valide)
         // Alors on peut l'enregistrer en base
-        if( $subscription->status === 'active' ) {
+        // @todo : c'est bancal .... quid d'une modification de facture après coup ?
+        if( $subscription->status === 'active' && $subscription->metadata->toArray() !== []) {
             $mapper = new JsonMapper();
             $mapper->bExceptionOnMissingData = true;
             $mapper->postMappingMethod = 'afterMapping';
