@@ -40,7 +40,13 @@ class CreateDonation
                 lang: $donationModel->getLang(),
                 isPaid: $donationModel->isPaid(),
                 paymentMethod: $donationModel->getPaymentMethod(),
-                project: $donationModel->getProject()
+                project: $donationModel->getProject(),
+                address: $donationModel->getCustomerModel()->getAddress(),
+                postalCode: $donationModel->getCustomerModel()->getPostalCode(),
+                city: $donationModel->getCustomerModel()->getCity(),
+                country: $donationModel->getCustomerModel()->getCountry(),
+                firstName: $donationModel->getCustomerModel()->getFirstname(),
+                lastName: $donationModel->getCustomerModel()->getLastname()
             );
         } else {
             $donationEntity = new RecurringDonationEntity(
@@ -50,7 +56,13 @@ class CreateDonation
                 lang: $donationModel->getLang(),
                 paymentMethod: $donationModel->getPaymentMethod(),
                 isPaid: $donationModel->isPaid(),
-                project: $donationModel->getProject()
+                project: $donationModel->getProject(),
+                address: $donationModel->getCustomerModel()->getAddress(),
+                postalCode: $donationModel->getCustomerModel()->getPostalCode(),
+                city: $donationModel->getCustomerModel()->getCity(),
+                country: $donationModel->getCustomerModel()->getCountry(),
+                firstName: $donationModel->getCustomerModel()->getFirstname(),
+                lastName: $donationModel->getCustomerModel()->getLastname()
             );
         }
 
