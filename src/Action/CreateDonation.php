@@ -59,6 +59,6 @@ class CreateDonation
         $em->persist($donationEntity);
         $em->flush($donationEntity);
 
-        do_action(CoralDonationActions::DONATION_CREATED->value, $donationEntity);
+        do_action(CoralDonationActions::DONATION_CREATED->value, $donationEntity, $donationModel->isExtra());
     }
 }

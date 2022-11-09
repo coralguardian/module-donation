@@ -48,6 +48,8 @@ class DonationModel implements \JsonSerializable
 
     private ?string $stripePaymentIntentId;
 
+    private bool $isExtra = false;
+
     public function afterMapping()
     {
         if($this->amount < 1) {
@@ -165,6 +167,17 @@ class DonationModel implements \JsonSerializable
         return $this;
     }
 
+    public function isExtra(): bool
+    {
+        return $this->isExtra;
+    }
+
+    public function setIsExtra(bool $isExtra): DonationModel
+    {
+        $this->isExtra = $isExtra;
+        return $this;
+    }
+
     public function jsonSerialize()
     {
         return [
@@ -174,7 +187,8 @@ class DonationModel implements \JsonSerializable
             'donationRecurrency' => $this->getDonationRecurrency()->value,
             'paymentMethod' => $this->getPaymentMethod()->value,
             'isPaid' => $this->isPaid(),
-            'project' => $this->project
+            'project' => $this->project,
+            'isExtra' => $this->isExtra
         ];
     }
 }

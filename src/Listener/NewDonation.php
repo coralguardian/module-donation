@@ -35,7 +35,8 @@ class NewDonation
                 ->setPaymentMethod(PaymentMethod::CREDIT_CARD)
                 ->setProject(Project::from($donationOrderModel->getProject()))
                 ->setLang(Language::FR) // @todo: Est ce que la langue a réellement du sens dans un don mensuel?
-                ->setCustomerModel($customerModel);
+                ->setCustomerModel($customerModel)
+                ->setIsExtra($donationOrderModel->isExtra());
 
             do_action(CoralDonationActions::PENDING_DONATION->value, $donationModel); // @todo: Découpler plus tard, on ne devrait pas avoir d'évènements d'un autre module.
     }
