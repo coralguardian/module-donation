@@ -28,7 +28,13 @@ class RecurringDonationEntity extends DonationEntity
         Language       $lang,
         PaymentMethod  $paymentMethod,
         bool           $isPaid,
-        Project        $project
+        Project        $project,
+        string         $address,
+        string         $postalCode,
+        string         $city,
+        string         $country,
+        string         $firstName,
+        string         $lastName
     )
     {
         parent::__construct(
@@ -38,7 +44,13 @@ class RecurringDonationEntity extends DonationEntity
             lang: $lang,
             isPaid: $isPaid,
             paymentMethod: $paymentMethod,
-            project: $project
+            project: $project,
+            address: $address,
+            postalCode: $postalCode,
+            city: $city,
+            country: $country,
+            firstName: $firstName,
+            lastName: $lastName
         );
     }
 

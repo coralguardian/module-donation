@@ -70,12 +70,42 @@ class DonationEntity
     /**
      * @ORM\Column(type="boolean", options={"default" : false})
      */
-    private bool $isPaid = false;
+    private bool $isPaid;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private ?int $fiscalReceiptNumber;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private string $address;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private string $postalCode;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private string $city;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private string $country;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private string $firstName;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private string $lastName;
 
     public function __construct(
         CustomerEntity $customer,
@@ -84,7 +114,13 @@ class DonationEntity
         Language       $lang,
         bool           $isPaid,
         PaymentMethod  $paymentMethod,
-        Project $project
+        Project        $project,
+        string         $address,
+        string         $postalCode,
+        string         $city,
+        string         $country,
+        string         $firstName,
+        string         $lastName
     ) {
         $this->customer = $customer;
         $this->date = $date;
@@ -93,6 +129,12 @@ class DonationEntity
         $this->isPaid = $isPaid;
         $this->paymentMethod = $paymentMethod;
         $this->project = $project;
+        $this->address = $address;
+        $this->postalCode = $postalCode;
+        $this->city = $city;
+        $this->country = $country;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
     }
 
     public function getUuid()
@@ -196,6 +238,79 @@ class DonationEntity
     public function setFiscalReceiptNumber(?int $fiscalReceiptNumber): DonationEntity
     {
         $this->fiscalReceiptNumber = $fiscalReceiptNumber;
+        return $this;
+    }
+
+    public function getAddress(): string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): DonationEntity
+    {
+        $this->address = $address;
+        return $this;
+    }
+
+    public function getPostalCode(): string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(string $postalCode): DonationEntity
+    {
+        $this->postalCode = $postalCode;
+        return $this;
+    }
+
+    public function getCity(): string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): DonationEntity
+    {
+        $this->city = $city;
+        return $this;
+    }
+
+    public function getCountry(): string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(string $country): DonationEntity
+    {
+        $this->country = $country;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param string $firstName
+     * @return DonationEntity
+     */
+    public function setFirstName(string $firstName): DonationEntity
+    {
+        $this->firstName = $firstName;
+        return $this;
+    }
+
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): DonationEntity
+    {
+        $this->lastName = $lastName;
         return $this;
     }
 }

@@ -11,6 +11,11 @@ use D4rk0snet\Donation\Enums\DonationRecurrencyEnum;
 use D4rk0snet\Donation\Models\DonationModel;
 use Hyperion\Doctrine\Service\DoctrineService;
 
+/**
+ * Cette classe va insérer dans notre base de données les éléments pour les dons
+ * Les étapes au niveau de stripe ont été fait en amont , on a désormais un donationModel.
+ * Cela permettra aussi au niveau de l'admin de créer des dons directement par ce point d'entrée.
+ */
 class CreateDonation
 {
     public static function doAction(DonationModel $donationModel)
@@ -35,7 +40,13 @@ class CreateDonation
                 lang: $donationModel->getLang(),
                 isPaid: $donationModel->isPaid(),
                 paymentMethod: $donationModel->getPaymentMethod(),
-                project: $donationModel->getProject()
+                project: $donationModel->getProject(),
+                address: $donationModel->getCustomerModel()->getAddress(),
+                postalCode: $donationModel->getCustomerModel()->getPostalCode(),
+                city: $donationModel->getCustomerModel()->getCity(),
+                country: $donationModel->getCustomerModel()->getCountry(),
+                firstName: $donationModel->getCustomerModel()->getFirstname(),
+                lastName: $donationModel->getCustomerModel()->getLastname()
             );
         } else {
             $donationEntity = new RecurringDonationEntity(
@@ -45,7 +56,13 @@ class CreateDonation
                 lang: $donationModel->getLang(),
                 paymentMethod: $donationModel->getPaymentMethod(),
                 isPaid: $donationModel->isPaid(),
-                project: $donationModel->getProject()
+                project: $donationModel->getProject(),
+                address: $donationModel->getCustomerModel()->getAddress(),
+                postalCode: $donationModel->getCustomerModel()->getPostalCode(),
+                city: $donationModel->getCustomerModel()->getCity(),
+                country: $donationModel->getCustomerModel()->getCountry(),
+                firstName: $donationModel->getCustomerModel()->getFirstname(),
+                lastName: $donationModel->getCustomerModel()->getLastname()
             );
         }
 
@@ -54,6 +71,6 @@ class CreateDonation
         $em->persist($donationEntity);
         $em->flush($donationEntity);
 
-        do_action(CoralDonationActions::NEW_DONATION->value, $donationModel, $donationEntity);
+        do_action(CoralDonationActions::DONATION_CREATED->value, $donationEntity, $donationModel->isExtra());
     }
 }
